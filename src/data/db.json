@@ -1,0 +1,46 @@
+{
+  "PRODUCTS": [
+    {
+      "id": 1,
+      "name": "Monitor Samsung",
+      "category": "Monitores",
+      "price": 10000,
+      "stock": 12,
+      "descripcion": "Monitor Marca Samsung",
+      "image_url": "https://baproar.vtexassets.com/arquivos/ids/973790-600-auto?v=638506211622930000&width=600&height=auto&aspect=true"
+    },
+    {
+      "id": 2,
+      "name": "Monitor LG",
+      "category": "Monitores",
+      "price": 8500,
+      "stock": 11,
+      "descripcion": "Monitor Marca LG",
+      "image_url": "https://www.lg.com/ar/images/monitores/md07556921/gallery/Dm-01.jpg"
+    },
+    {
+      "id": 3,
+      "name": "Monitor chico",
+      "category": "monitores",
+      "price": 700,
+      "stock": 12,
+      "descripcion": "excelente monitor tamaño chico"
+    },
+    {
+      "id": 4,
+      "name": "Monitor grande",
+      "category": "monitores",
+      "price": 800,
+      "stock": 13,
+      "descripcion": "excelente monitor grande"
+    },
+    {
+      "id": 5,
+      "name": "Monitor mediano",
+      "category": "monitores",
+      "price": 550,
+      "stock": 17,
+      "descripcion": "excelente monitor tamaño mediano"
+    }
+  ]
+}
