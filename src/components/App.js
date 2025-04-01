@@ -4,7 +4,8 @@ const App = () => {
   const [productos, setProductos] = useState([]); // asegura que es un array
 
   useEffect(() => {
-    fetch("http://localhost:5000/PRODUCTS") // corriendo en el puerto 3000, peticion get
+    // npx json-server src/data/db.json -p 5001
+    fetch("http://localhost:5001/PRODUCTS") // corriendo en el puerto 5001, peticion get
       .then((res) => res.json()) // respuesta, convetir en json
       .then((data) => {
         console.log("Productos cargados:", data); // Verifica si los datos están llegando
