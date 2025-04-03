@@ -1,31 +1,30 @@
-import Products from "../data/db.json";
-import { configureStore, createSlice } from "@reduxjs/toolkit";
-import { thunk } from "redux-thunk";
+import { createStore, applyMiddleware, combineReducers } from "redux";
+import thunk from "redux-thunk";
 
 const initialState = { productos: [], numeroPagina: 1 };
-const productsSlice = createSlice({
-  initialState,
-  name: "productos",
-  reducers: {
-    setProducts: (state, actions) => {
-      state.productos = actions.payload;
-    },
-  },
+
+const productReducer = (state = initialState, action) => {
+  switch (action.type) {
+    case "SET_PRODUCTS":
+      return { ...state, productos: action.payload };
+    default:
+      return state;
+  }
+};
+
+const rootReducer = combineReducers({
+  productos: productReducer,
 });
 
-const actions = productsSlice.actions;
-const store = configureStore({
-  reducer: { productos: productsSlice.reducer },
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(thunk),
-});
+const store = createStore(rootReducer, applyMiddleware(thunk));
 
 export const getProducts = () => (dispatch) => {
-  fetch("http://localhost:5001/PRODUCTS") // corriendo en el puerto 5001, peticion get
-    .then((res) => res.json()) // respuesta, convetir en json
+  fetch("http://localhost:5001/PRODUCTS") // Petición GET
+    .then((res) => res.json()) // Convertir respuesta en JSON
     .then((data) => {
-      console.log("Productos cargados:", data); // Verifica si los datos están llegando
-      dispatch(actions.setProducts(data));
-    }) /// actualazar productos
+      console.log("Productos cargados:", data);
+      dispatch({ type: "SET_PRODUCTS", payload: data }); // Actualizar productos en Redux
+    })
     .catch((err) => console.error("Error cargando productos:", err));
 };
 
