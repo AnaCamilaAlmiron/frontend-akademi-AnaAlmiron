@@ -2,45 +2,66 @@
   "PRODUCTS": [
     {
       "id": 1,
-      "name": "Monitor Samsung",
+      "name": "Monitor Samsung 24\" Full HD",
       "category": "Monitores",
-      "price": 10000,
-      "stock": 12,
-      "descripcion": "Monitor Marca Samsung",
-      "image_url": "https://baproar.vtexassets.com/arquivos/ids/973790-600-auto?v=638506211622930000&width=600&height=auto&aspect=true"
+      "price": 120000,
+      "stock": 15,
+      "descripcion": "Monitor Samsung de 24 pulgadas con resolución Full HD.",
+      "image_url": "https://images.fravega.com/f300/3d8a9005466f715f029183e148799f3d.jpg.webp"
     },
     {
       "id": 2,
-      "name": "Monitor LG",
+      "name": "Monitor LG 27\" 4K UHD",
       "category": "Monitores",
-      "price": 8500,
-      "stock": 11,
-      "descripcion": "Monitor Marca LG",
-      "image_url": "https://www.lg.com/ar/images/monitores/md07556921/gallery/Dm-01.jpg"
+      "price": 180000,
+      "stock": 10,
+      "descripcion": "Monitor LG de 27 pulgadas con resolución 4K UHD.",
+      "image_url": "https://images.fravega.com/f300/eb7602887c304be2d1a224b0dde6d1a1.jpg.webp"
     },
     {
       "id": 3,
-      "name": "Monitor chico",
-      "category": "monitores",
-      "price": 700,
-      "stock": 12,
-      "descripcion": "excelente monitor tamaño chico"
+      "name": "Monitor Dell 22\" LED",
+      "category": "Monitores",
+      "price": 95000,
+      "stock": 20,
+      "descripcion": "Monitor Dell de 22 pulgadas con tecnología LED.",
+      "image_url": "https://images.fravega.com/f300/b0122b28282b267aa89a90eaaa358c0e.jpg.webp"
     },
     {
       "id": 4,
-      "name": "Monitor grande",
-      "category": "monitores",
-      "price": 800,
-      "stock": 13,
-      "descripcion": "excelente monitor grande"
+      "name": "Monitor HP 27\" Curvo",
+      "category": "Monitores",
+      "price": 160000,
+      "stock": 12,
+      "descripcion": "Monitor HP curvo de 27 pulgadas para una experiencia inmersiva.",
+      "image_url": "https://images.fravega.com/f300/7108f6fce85dd6e0d5c1f5d4d9450eb0.jpg.webp"
     },
     {
       "id": 5,
-      "name": "Monitor mediano",
-      "category": "monitores",
-      "price": 550,
-      "stock": 17,
-      "descripcion": "excelente monitor tamaño mediano"
+      "name": "Monitor ASUS 27\" Gaming",
+      "category": "Monitores",
+      "price": 140000,
+      "stock": 18,
+      "descripcion": "Monitor ASUS de 27 pulgadas diseñado para gaming.",
+      "image_url": "https://images.fravega.com/f300/a66f5c3405d0500256ec296d4707b7b8.jpg.webp"
+    },
+    {
+      "id": 6,
+      "name": "Mouse Logitech Inalámbrico",
+      "category": "Mouses",
+      "price": 25000,
+      "stock": 30,
+      "descripcion": "Mouse inalámbrico Logitech con diseño ergonómico.",
+      "image_url": "https://images.fravega.com/f300/174af5cd1f5018ce8750df8952c8eb81.jpg.webp"
+    },
+    {
+      "id": 7,
+      "name": "Mouse Microsoft Bluetooth",
+      "category": "Mouses",
+      "price": 27000,
+      "stock": 25,
+      "descripcion": "Mouse Microsoft con conectividad Bluetooth.",
+      "image_url": "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcSLya-R6mP0ZLEaBm54G96dMG8BLgUDsghg1W5v9OSw_vryU6W_t4ykAM5bNfwI0kPajPGGyiPrJFiuWiLTf-GD73_VX2DtHFwjue0pvg53fwmr-ZzTDFXh0IC4fgSocQ1TVbg&usqp=CAc"
     }
   ]
 }

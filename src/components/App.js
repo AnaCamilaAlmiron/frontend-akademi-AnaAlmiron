@@ -1,32 +1,24 @@
 import React, { useState, useEffect } from "react";
+import Card from "./Card";
+import "../styles/Cards.css";
+import { useDispatch, useSelector } from "react-redux";
+import { getProducts } from "../redux/store";
 
 const App = () => {
-  const [productos, setProductos] = useState([]); // asegura que es un array
-
+  //const [productos, setProductos] = useState([]); // asegura que es un array
+  const productos = useSelector((store) => store.productos.productos); //linea 18 store.js
+  console.log(productos);
+  const dispatch = useDispatch();
   useEffect(() => {
     // npx json-server src/data/db.json -p 5001
-    fetch("http://localhost:5001/PRODUCTS") // corriendo en el puerto 5001, peticion get
-      .then((res) => res.json()) // respuesta, convetir en json
-      .then((data) => {
-        console.log("Productos cargados:", data); // Verifica si los datos están llegando
-        setProductos(data);
-      }) /// actualazar productos
-      .catch((err) => console.error("Error cargando productos:", err));
+    dispatch(getProducts()); //despachar funcion getproducts de store
   }, []);
-
   return (
     <div>
-      <div className="card">
+      <div className="card-container">
         {productos.length > 0
           ? productos.map((producto) => (
-              <div className="card">
-                <img src={producto.image_url} alt="" width="150" />
-                <h3>{producto.name}</h3>
-                <p>{producto.descripcion}</p>
-                <p>Precio: ${producto.price}</p>
-                <p>Stock: {producto.stock}</p>
-                <button>Detalles</button>
-              </div>
+              <Card key={producto.id} producto={producto} />
             ))
           : console.log("no se encontraron los resultados")}
       </div>
