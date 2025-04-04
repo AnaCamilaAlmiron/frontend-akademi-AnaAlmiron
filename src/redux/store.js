@@ -1,31 +1,57 @@
 import { createStore, applyMiddleware, combineReducers } from "redux";
 import { thunk } from "redux-thunk";
 
-const initialState = { productos: [], numeroPagina: 1 };
+const initialState = {
+  productos: [],
+  productosFiltrados: [],
+  numeroPagina: 1,
+  productosPorPagina: 8,
+};
 
-const productReducer = (state = initialState, action) => {
+const productsReducer = (state = initialState, action) => {
   switch (action.type) {
     case "SET_PRODUCTS":
-      return { ...state, productos: action.payload };
+      return {
+        ...state,
+        productos: action.payload,
+        productosFiltrados: action.payload,
+      };
+    case "FILTRAR_POR_CATEGORIA":
+      return {
+        ...state,
+        productosFiltrados:
+          action.payload === "todos"
+            ? state.productos
+            : state.productos.filter((p) => p.category === action.payload),
+      };
+    case "CAMBIAR_PAGINA":
+      const nuevaPagina =
+        action.payload === "siguiente"
+          ? state.numeroPagina + 1
+          : state.numeroPagina - 1;
+      return {
+        ...state,
+        numeroPagina: nuevaPagina,
+      };
+
     default:
       return state;
   }
 };
 
 const rootReducer = combineReducers({
-  productos: productReducer,
+  productos: productsReducer,
 });
 
 const store = createStore(rootReducer, applyMiddleware(thunk));
 
+export default store;
+
 export const getProducts = () => (dispatch) => {
-  fetch("http://localhost:5001/PRODUCTS") // Petición GET
-    .then((res) => res.json()) // Convertir respuesta en JSON
+  fetch("http://localhost:5001/PRODUCTS")
+    .then((res) => res.json())
     .then((data) => {
-      console.log("Productos cargados:", data);
-      dispatch({ type: "SET_PRODUCTS", payload: data }); // Actualizar productos en Redux
+      dispatch({ type: "SET_PRODUCTS", payload: data });
     })
     .catch((err) => console.error("Error cargando productos:", err));
 };
-
-export default store;

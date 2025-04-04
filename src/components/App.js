@@ -1,26 +1,77 @@
 import React, { useEffect } from "react";
-import Card from "./Card";
-import "../styles/Cards.css";
 import { useDispatch, useSelector } from "react-redux";
+import Navbar from "./Navbar";
+import Card from "./Card";
 import { getProducts } from "../redux/store";
+import "../styles/Cards.css";
 
 const App = () => {
-  const productos = useSelector((store) => store.productos.productos);
   const dispatch = useDispatch();
+
+  const isLoading = useSelector((store) => store.productos.loading);
+  const productosFiltrados = useSelector(
+    (state) => state.productos.productosFiltrados
+  );
+  const numeroPagina = useSelector((state) => state.productos.numeroPagina);
+  const productosPorPagina = useSelector(
+    (state) => state.productos.productosPorPagina
+  );
+
+  const indiceUltimoProducto = numeroPagina * productosPorPagina;
+  const indicePrimerProducto = indiceUltimoProducto - productosPorPagina;
+  const productosActuales = productosFiltrados.slice(
+    indicePrimerProducto,
+    indiceUltimoProducto
+  );
 
   useEffect(() => {
     dispatch(getProducts());
   }, [dispatch]);
+
+  const dispatchPagina = (tipo) => {
+    dispatch({ type: "CAMBIAR_PAGINA", payload: tipo });
+  };
+
+  const totalPaginas = Math.ceil(
+    productosFiltrados.length / productosPorPagina
+  );
+
+  if (isLoading) {
+    return <p>Cargando productos...</p>;
+  }
+
   return (
     <div>
+      <Navbar />
+
       <div className="card-container">
-        {productos.length > 0 ? (
-          productos.map((producto) => (
+        {productosActuales.length > 0 ? (
+          productosActuales.map((producto) => (
             <Card key={producto.id} producto={producto} />
           ))
         ) : (
-          <p>No se encontraron resultados</p>
+          <p style={{ textAlign: "center" }}>No se encontraron resultados</p>
         )}
+      </div>
+
+      <div style={{ textAlign: "center", marginTop: "20px" }}>
+        <button
+          onClick={() => dispatchPagina("anterior")}
+          disabled={numeroPagina === 1}
+          style={{ marginRight: "10px" }}
+        >
+          Anterior
+        </button>
+        <span>
+          Página {numeroPagina} de {totalPaginas}
+        </span>
+        <button
+          onClick={() => dispatchPagina("siguiente")}
+          disabled={numeroPagina === totalPaginas}
+          style={{ marginLeft: "10px" }}
+        >
+          Siguiente
+        </button>
       </div>
     </div>
   );

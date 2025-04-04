@@ -4,10 +4,15 @@ const Card = ({ producto }) => {
     <div className="card">
       <img src={producto.image_url} alt={producto.name} />
       <h3>{producto.name}</h3>
-      <p>{producto.descripcion}</p>
+      <p className="descripcion">{producto.descripcion}</p>
       <p>Precio: ${producto.price}</p>
-      <p>Stock: {producto.stock}</p>
+      <div className="stock-btn">
+        <button className="stock"> - </button>
+        <p>Stock: {producto.stock}</p>
+        <button className="stock"> + </button>
+      </div>
       <button className="detalles">Detalles</button>
+      <button className="modificar-btn">Modificar</button>
     </div>
   );
 };
