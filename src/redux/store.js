@@ -5,7 +5,7 @@ const initialState = {
   productos: [],
   productosFiltrados: [],
   numeroPagina: 1,
-  productosPorPagina: 8,
+  productosPorPagina: 5,
 };
 
 const productsReducer = (state = initialState, action) => {
@@ -33,7 +33,14 @@ const productsReducer = (state = initialState, action) => {
         ...state,
         numeroPagina: nuevaPagina,
       };
-
+    case "ELIMINAR_PRODUCTO":
+      return {
+        ...state,
+        productos: state.productos.filter((p) => p.id !== action.payload),
+        productosFiltrados: state.productosFiltrados.filter(
+          (p) => p.id !== action.payload
+        ),
+      };
     default:
       return state;
   }

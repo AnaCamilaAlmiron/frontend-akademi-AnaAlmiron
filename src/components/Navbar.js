@@ -7,17 +7,18 @@ const Navbar = () => {
   const dispatch = useDispatch();
 
   const toggleAccordion = () => {
-    setIsOpen(!isOpen);
+    setIsOpen(!isOpen); // abrir y cerrar acordeon
   };
-
   const handleFilter = (category) => {
+    //filtro s/ categoria
     dispatch({ type: "FILTRAR_POR_CATEGORIA", payload: category });
   };
 
   return (
     <nav className="navbar">
       <div className="accordion-toggle" onClick={toggleAccordion}>
-        Filtros ▼
+        {" "}
+        Filtros
         {isOpen && (
           <div className="accordion-content">
             <button className="filtro" onClick={() => handleFilter("todos")}>
