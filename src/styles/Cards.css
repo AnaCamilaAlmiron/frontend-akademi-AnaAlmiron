@@ -47,28 +47,3 @@ body {
   object-fit: contain;
   border-radius: 10px 10px 0 0;
 }
-.stock-btn {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 10px;
-}
-.modificar-btn {
-  background-color: #28a745;
-  color: white;
-  border: none;
-  padding: 5px;
-  width: 100%;
-  margin-top: 10px;
-  border-radius: 5px;
-  cursor: pointer;
-}
-.detalles {
-  background-color: #007bff;
-  color: white;
-  border: none;
-  padding: 10px;
-  width: 100%;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-top: 10px;
-}
