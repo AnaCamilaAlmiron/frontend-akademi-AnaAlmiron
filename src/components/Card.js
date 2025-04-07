@@ -12,7 +12,7 @@ const Card = ({ producto }) => {
         <button className="detalles">Detalle</button>
       </Link>
 
-      <Link to={`/editar/${producto.id}`}>
+      <Link to={`/product/${producto.id}/edit`}>
         <button className="modificar-btn">Modificar</button>
       </Link>
     </div>
