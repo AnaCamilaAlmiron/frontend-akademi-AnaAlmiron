@@ -1,22 +1,34 @@
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Card = ({ producto }) => {
+  const navigate = useNavigate();
+
   return (
-    <div className="card">
-      <img src={producto.image_url} alt={producto.name} />
+    <div
+      style={{
+        border: "1px solid #ccc",
+        padding: "1rem",
+        width: "200px",
+        textAlign: "center",
+      }}
+    >
+      <img
+        src={producto.image_url}
+        alt={producto.name}
+        style={{ width: "100%" }}
+      />
+
       <h3>{producto.name}</h3>
       <p>Precio: ${producto.price}</p>
       <p>Stock: {producto.stock}</p>
 
-      <Link to={`/product/${producto.id}`}>
-        <button className="detalles">Detalle</button>
-      </Link>
-
-      <Link to={`/product/${producto.id}/edit`}>
-        <button className="modificar-btn">Modificar</button>
-      </Link>
+      <button onClick={() => navigate(`/product/${producto.id}`)}>
+        Detalle
+      </button>
+      <button onClick={() => navigate(`/edit/${producto.id}`)}>
+        Modificar
+      </button>
     </div>
   );
 };
-
 export default Card;

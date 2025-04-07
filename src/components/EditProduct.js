@@ -1,91 +1,131 @@
+import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
-import { useState } from "react";
+import { getProducts } from "../redux/store";
+import "../styles/EditProducts.css";
 
 const EditProduct = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [mostrarModal, setMostrarModal] = useState(false);
 
-  const producto = useSelector((state) =>
-    state.productos.productos.find((p) => p.id === parseInt(id))
-  );
+  const productos = useSelector((state) => state.productos.productos);
+  const producto = productos.find((p) => String(p.id) === id);
 
-  if (!producto) return <p>Producto no encontrado</p>;
+  const [form, setForm] = useState({
+    name: "",
+    price: "",
+    stock: "",
+    image_url: "",
+    descripcion: "",
+  });
 
-  const handleEliminar = async () => {
+  useEffect(() => {
+    if (productos.length === 0) dispatch(getProducts());
+  }, [dispatch, productos.length]);
+
+  useEffect(() => {
+    if (producto) setForm(producto);
+  }, [producto]);
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const guardarCambios = async () => {
+    const { name, price, stock, image_url, descripcion } = form;
+
+    if (!name.trim() || !descripcion.trim() || !image_url.trim()) {
+      alert("Todos los campos deben estar completos.");
+      return;
+    }
+
+    const precioNum = Number(price);
+    const stockNum = Number(stock);
+
+    if (isNaN(precioNum) || precioNum <= 0) {
+      alert("El precio debe ser mayor a 0.");
+      return;
+    }
+
+    if (isNaN(stockNum) || stockNum < 0) {
+      alert("El stock no puede ser negativo.");
+      return;
+    }
+
     try {
-      await axios.delete(`http://localhost:3000/productos/${producto.id}`);
-      dispatch({ type: "ELIMINAR_PRODUCTO", payload: producto.id });
-      setMostrarModal(false);
-      navigate("/");
+      const response = await axios.put(`http://localhost:5001/PRODUCTS/${id}`, {
+        ...form,
+        price: precioNum,
+        stock: stockNum,
+      });
+      dispatch({ type: "ACTUALIZAR_PRODUCTO", payload: response.data });
+      navigate(`/product/${id}`);
     } catch (error) {
-      alert("Error al eliminar el producto");
+      alert("Error al actualizar el producto.");
+      console.error(error);
     }
   };
 
+  if (!producto) return <p>Producto no encontrado</p>;
+
   return (
-    <div style={{ padding: "20px" }}>
-      <h2>Editar producto</h2>
-      <p>Nombre: {producto.name}</p>
-      <p>Descripción: {producto.descripcion}</p>
-      <p>Precio: ${producto.price}</p>
-      <p>Stock: {producto.stock}</p>
-
-      <button
-        onClick={() => setMostrarModal(true)}
-        style={{ backgroundColor: "red", color: "white" }}
-      >
-        Eliminar
-      </button>
-
-      <button onClick={() => navigate(-1)} style={{ marginTop: "20px" }}>
-        Volver
-      </button>
-
-      {mostrarModal && (
-        <div
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
-            backgroundColor: "rgba(0,0,0,0.5)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            zIndex: 1000,
-          }}
-        >
-          <div
-            style={{
-              background: "white",
-              padding: "30px",
-              borderRadius: "10px",
-              textAlign: "center",
-              width: "300px",
-            }}
-          >
-            <h3>¿Eliminar "{producto.name}"?</h3>
-            <div style={{ marginTop: "20px" }}>
-              <button
-                onClick={handleEliminar}
-                style={{
-                  backgroundColor: "red",
-                  color: "white",
-                  marginRight: "10px",
-                }}
-              >
-                Confirmar
-              </button>
-              <button onClick={() => setMostrarModal(false)}>Cancelar</button>
-            </div>
-          </div>
-        </div>
-      )}
+    <div className="edit-container">
+      <h2 className="edit-title">Modificar producto: {form.name}</h2>
+      <div className="edit-form-group">
+        <label>Nombre:</label>
+        <input
+          name="name"
+          value={form.name}
+          onChange={handleChange}
+          placeholder="Nombre"
+        />
+      </div>
+      <div className="edit-form-group">
+        <label>Precio:</label>
+        <input
+          name="price"
+          value={form.price}
+          onChange={handleChange}
+          placeholder="Precio"
+        />
+      </div>
+      <div className="edit-form-group">
+        <label>Stock:</label>
+        <input
+          name="stock"
+          value={form.stock}
+          onChange={handleChange}
+          placeholder="Stock"
+        />
+      </div>
+      <div className="edit-form-group">
+        <label>Imagen URL:</label>
+        <input
+          name="image_url"
+          value={form.image_url}
+          onChange={handleChange}
+          placeholder="URL de imagen"
+        />
+      </div>
+      <div className="edit-form-group">
+        <label>Descripción:</label>
+        <textarea
+          name="descripcion"
+          value={form.descripcion}
+          onChange={handleChange}
+          placeholder="Descripción"
+        />
+      </div>
+      <div className="edit-buttons">
+        <button className="edit-save" onClick={guardarCambios}>
+          Guardar
+        </button>
+        <button className="edit-cancel" onClick={() => navigate(-1)}>
+          Cancelar
+        </button>
+      </div>
     </div>
   );
 };

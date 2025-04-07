@@ -16,6 +16,7 @@ const productsReducer = (state = initialState, action) => {
         productos: action.payload,
         productosFiltrados: action.payload,
       };
+
     case "FILTRAR_POR_CATEGORIA":
       return {
         ...state,
@@ -24,6 +25,7 @@ const productsReducer = (state = initialState, action) => {
             ? state.productos
             : state.productos.filter((p) => p.category === action.payload),
       };
+
     case "CAMBIAR_PAGINA":
       const nuevaPagina =
         action.payload === "siguiente"
@@ -33,6 +35,7 @@ const productsReducer = (state = initialState, action) => {
         ...state,
         numeroPagina: nuevaPagina,
       };
+
     case "ELIMINAR_PRODUCTO":
       return {
         ...state,
@@ -41,6 +44,26 @@ const productsReducer = (state = initialState, action) => {
           (p) => p.id !== action.payload
         ),
       };
+
+    case "ORDENAR_PRODUCTOS":
+      const ordenados = [...state.productosFiltrados];
+      const [campo, orden] = action.payload.split("-");
+
+      ordenados.sort((a, b) => {
+        if (campo === "price" || campo === "stock") {
+          return orden === "asc" ? a[campo] - b[campo] : b[campo] - a[campo];
+        } else {
+          return orden === "asc"
+            ? a[campo].localeCompare(b[campo])
+            : b[campo].localeCompare(a[campo]);
+        }
+      });
+
+      return {
+        ...state,
+        productosFiltrados: ordenados,
+      };
+
     default:
       return state;
   }
@@ -54,11 +77,24 @@ const store = createStore(rootReducer, applyMiddleware(thunk));
 
 export default store;
 
-export const getProducts = () => (dispatch) => {
-  fetch("http://localhost:5001/PRODUCTS")
-    .then((res) => res.json())
-    .then((data) => {
+export const getProducts = () => {
+  return async (dispatch) => {
+    try {
+      const response = await fetch("http://localhost:5001/PRODUCTS");
+      const data = await response.json();
+
+      console.log("DATA desde API:", data);
+
       dispatch({ type: "SET_PRODUCTS", payload: data });
-    })
-    .catch((err) => console.error("Error cargando productos:", err));
+    } catch (error) {
+      console.error("Error al obtener productos:", error);
+    }
+  };
 };
+
+export const ORDENAR_PRODUCTOS = "ORDENAR_PRODUCTOS";
+
+export const ordenarProductos = (criterio) => ({
+  type: ORDENAR_PRODUCTOS,
+  payload: criterio,
+});
