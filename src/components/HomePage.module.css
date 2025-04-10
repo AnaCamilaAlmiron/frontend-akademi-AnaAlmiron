@@ -1,0 +1,40 @@
+.wrapper {
+  margin: 0 auto;
+  max-width: 760px;
+  width: 100%;
+  margin-top: 3rem;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.productContainer {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  grid-column: span 2 / span 2;
+  gap: 16px;
+}
+
+.paginationContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem 0;
+}
+
+.button {
+  background-color: #d1fae8;
+  color: black;
+  padding: 8px 16px;
+  outline: none;
+  border: 1px solid #ecfdf6;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.button:disabled {
+  background-color: #eee;
+  color: #ccc;
+}

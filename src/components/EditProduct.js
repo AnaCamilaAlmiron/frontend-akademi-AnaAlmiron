@@ -1,17 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import axios from "axios";
+import useGetProductById from "../hooks/useGetProductById";
 import { getProducts } from "../redux/store";
-import "../styles/EditProducts.css";
 
 const EditProduct = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
-  const productos = useSelector((state) => state.productos.productos);
-  const producto = productos.find((p) => String(p.id) === id);
+  const { producto } = useGetProductById(id);
 
   const [form, setForm] = useState({
     name: "",
@@ -20,10 +18,6 @@ const EditProduct = () => {
     image_url: "",
     descripcion: "",
   });
-
-  useEffect(() => {
-    if (productos.length === 0) dispatch(getProducts());
-  }, [dispatch, productos.length]);
 
   useEffect(() => {
     if (producto) setForm(producto);
@@ -55,12 +49,12 @@ const EditProduct = () => {
     }
 
     try {
-      const response = await axios.put(`http://localhost:5001/PRODUCTS/${id}`, {
+      await axios.put(`http://localhost:5001/PRODUCTS/${id}`, {
         ...form,
         price: precioNum,
         stock: stockNum,
       });
-      dispatch({ type: "ACTUALIZAR_PRODUCTO", payload: response.data });
+      dispatch(getProducts());
       navigate(`/product/${id}`);
     } catch (error) {
       alert("Error al actualizar el producto.");

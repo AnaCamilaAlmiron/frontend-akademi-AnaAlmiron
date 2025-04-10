@@ -1,0 +1,19 @@
+.panel {
+  padding: 0.5rem;
+}
+
+.label {
+  display: block;
+  color: #aaa;
+  font-size: 12px;
+}
+
+.select {
+  width: 100%;
+  background-color: white;
+  outline: none;
+  border: none;
+  padding: 8px 12px;
+  border: 1px solid #aaa;
+  margin-bottom: 1rem;
+}

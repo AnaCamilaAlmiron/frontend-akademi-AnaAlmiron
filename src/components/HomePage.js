@@ -1,110 +1,64 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { getProducts, ordenarProductos } from "../redux/store";
-import Navbar from "./Navbar";
+import React from "react";
+import FiltersPanel from "./FiltersPanel";
 import Card from "./Card";
-import "../styles/Cards.css";
+import useGetProducts from "../hooks/useGetProducts";
+import usePagination, { productsPerPage } from "../hooks/usePagination";
+import useFilters from "../hooks/useFilters";
+import styles from "./HomePage.module.css";
 
 const HomePage = () => {
-  const dispatch = useDispatch();
+  const { productosCargados, getProductsOnPage } = useGetProducts();
+  const { order, sortBy, category } = useFilters();
 
-  const productosFiltrados = useSelector(
-    (state) => state.productos.productosFiltrados
-  );
-  const numeroPagina = useSelector((state) => state.productos.numeroPagina);
-  const productosPorPagina = useSelector(
-    (state) => state.productos.productosPorPagina
-  );
-  const isLoading = useSelector((state) => state.productos.loading);
+  const productos = getProductsOnPage(sortBy, order, category);
 
-  useEffect(() => {
-    dispatch(getProducts());
-  }, [dispatch]);
+  const { currentPage, setCurrentPage, totalPages } = usePagination(productos);
 
-  const handleOrden = (e) => {
-    const valor = e.target.value;
-    if (valor) dispatch(ordenarProductos(valor));
-  };
-
-  const dispatchPagina = (tipo) => {
-    dispatch({ type: "CAMBIAR_PAGINA", payload: tipo });
-  };
-
-  // Paginación
-  const indiceUltimoProducto = numeroPagina * productosPorPagina;
-  const indicePrimerProducto = indiceUltimoProducto - productosPorPagina;
-  const productosActuales = productosFiltrados.slice(
-    indicePrimerProducto,
-    indiceUltimoProducto
-  );
-  const totalPaginas = Math.ceil(
-    productosFiltrados.length / productosPorPagina
+  const productsOnPage = productos.slice(
+    currentPage * productsPerPage,
+    currentPage * productsPerPage + productsPerPage
   );
 
-  if (isLoading) {
+  if (!productosCargados) {
     return <p style={{ textAlign: "center" }}>Cargando productos...</p>;
   }
 
   return (
-    <div style={{ padding: "2rem" }}>
-      <Navbar />
+    <div className={styles.wrapper}>
       <h2>Productos</h2>
-
-      {/* Ordenamiento */}
-      <select onChange={handleOrden} defaultValue="">
-        <option value="" disabled>
-          Ordenar por...
-        </option>
-        <option value="name-asc">Nombre A-Z</option>
-        <option value="name-desc">Nombre Z-A</option>
-        <option value="price-asc">Precio Menor a Mayor</option>
-        <option value="price-desc">Precio Mayor a Menor</option>
-        <option value="stock-asc">Stock Menor a Mayor</option>
-        <option value="stock-desc">Stock Mayor a Menor</option>
-      </select>
-
-      <div className="card-container" style={{ marginTop: "1rem" }}>
-        {productosActuales.length > 0 ? (
-          productosActuales.map((producto) => (
-            <Card key={producto.id} producto={producto} />
-          ))
-        ) : (
-          <p style={{ textAlign: "center" }}>No hay productos disponibles</p>
-        )}
-      </div>
-
-      {/* Paginado */}
-      <div
-        style={{
-          position: "fixed",
-          bottom: 0,
-          left: 0,
-          width: "100%",
-          background: "#f9f9f9",
-          padding: "10px 0",
-          textAlign: "center",
-          boxShadow: "0 -2px 5px rgba(0,0,0,0.1)",
-          zIndex: 10,
-        }}
-      >
-        <button
-          onClick={() => dispatchPagina("anterior")}
-          disabled={numeroPagina === 1}
-          style={{ marginRight: "10px" }}
-        >
-          Anterior
-        </button>
-        <span>
-          Página {numeroPagina} de {totalPaginas}
-        </span>
-        <button
-          onClick={() => dispatchPagina("siguiente")}
-          disabled={numeroPagina === totalPaginas}
-          style={{ marginLeft: "10px" }}
-        >
-          Siguiente
-        </button>
-      </div>
+      <section className={styles.container}>
+        <FiltersPanel />
+        <div className={styles.productContainer}>
+          {productsOnPage.length > 0 ? (
+            productsOnPage.map((producto) => (
+              <Card key={producto.id} producto={producto} showActions />
+            ))
+          ) : (
+            <p style={{ textAlign: "center" }}>No hay productos disponibles</p>
+          )}
+          <div className={styles.paginationContainer}>
+            <button
+              className={styles.button}
+              onClick={() => setCurrentPage(currentPage - 1)}
+              disabled={currentPage === 1}
+              style={{ marginRight: "10px" }}
+            >
+              Anterior
+            </button>
+            <span>
+              Página {currentPage} de {totalPages}
+            </span>
+            <button
+              className={styles.button}
+              onClick={() => setCurrentPage(currentPage + 1)}
+              disabled={currentPage === totalPages}
+              style={{ marginLeft: "10px" }}
+            >
+              Siguiente
+            </button>
+          </div>
+        </div>
+      </section>
     </div>
   );
 };

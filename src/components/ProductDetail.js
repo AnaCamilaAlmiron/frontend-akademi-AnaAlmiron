@@ -1,28 +1,24 @@
 import React from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+import useGetProductById from "../hooks/useGetProductById";
+import styles from "./ProductDetail.module.css";
+import Card from "./Card";
 
 const ProductDetail = () => {
   const { id } = useParams();
-  const navigate = useNavigate();
-  const productos = useSelector((state) => state.productos.productos);
-  const producto = productos.find((p) => String(p.id) === id);
+  const { producto } = useGetProductById(id);
 
   if (!producto) return <p>Producto no encontrado</p>;
 
   return (
-    <div style={{ padding: "2rem" }}>
+    <div className={styles.wrapper}>
       <h2>Detalle de {producto.name}</h2>
-      <img src={producto.image_url} alt={producto.name} width="200" />
-      <p>Precio: ${producto.price}</p>
-      <p>Stock: {producto.stock}</p>
-      <p>Descripción: {producto.descripcion}</p>
-
-      {/* <Link to={`/edit/${producto.id}`}>
-        <button style={{ marginRight: "10px" }}>Modificar</button>
-      </Link> */}
-
-      <button onClick={() => navigate("/")}>Volver</button>
+      <div className={styles.linkContainer}>
+        <a href="/" className={styles.link}>
+          Volver
+        </a>
+      </div>
+      <Card key={producto.id} producto={producto} />
     </div>
   );
 };

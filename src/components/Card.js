@@ -1,33 +1,30 @@
-import { useNavigate } from "react-router-dom";
+import styles from "./Card.module.css";
 
-const Card = ({ producto }) => {
-  const navigate = useNavigate();
-
+const Card = ({ producto, showActions }) => {
   return (
-    <div
-      style={{
-        border: "1px solid #ccc",
-        padding: "1rem",
-        width: "200px",
-        textAlign: "center",
-      }}
-    >
-      <img
-        src={producto.image_url}
-        alt={producto.name}
-        style={{ width: "100%" }}
+    <div className={styles.card}>
+      <div
+        className={styles.cardImage}
+        style={{ backgroundImage: `url(${producto.image_url})` }}
       />
 
-      <h3>{producto.name}</h3>
-      <p>Precio: ${producto.price}</p>
-      <p>Stock: {producto.stock}</p>
+      <div className={styles.cardInfoContainer}>
+        <h3 className={styles.cardTitle}>{producto.name}</h3>
+        <p className={styles.cardPrice}>
+          ${producto.price} / {producto.stock} disponibles
+        </p>
 
-      <button onClick={() => navigate(`/product/${producto.id}`)}>
-        Detalle
-      </button>
-      <button onClick={() => navigate(`/edit/${producto.id}`)}>
-        Modificar
-      </button>
+        {showActions && (
+          <div className={styles.cardActions}>
+            <a className={styles.cardLink} href={`/product/${producto.id}`}>
+              Ver producto
+            </a>
+            <a className={styles.cardLink} href={`/edit/${producto.id}`}>
+              Editar
+            </a>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
